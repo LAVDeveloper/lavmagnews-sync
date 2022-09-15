@@ -1,4 +1,5 @@
 import type {ActionMessageV2, EventMessageV2} from '@proca/queue'
+import {Contact, ContactValues, ContactOptions} from './magnews'
 
 export const listName = (action : ActionMessageV2, listPerLang : boolean) => {
   let c = action.campaign.name
@@ -11,63 +12,32 @@ export const listName = (action : ActionMessageV2, listPerLang : boolean) => {
   }
 }
 
-export interface ContactValues {
-    EMAIL         : string;
-    NAME          : string;
-    SURNAME       : string;
-    CELL?         : string;
-    WBST_AUDIENCE : string;
-    NOME_UTENTE   : string;
-    UTM_SOURCE?   : string;
-    UTM_MEDIUM?   : string;
-    UTM_CAMPAIGN? : string;
-    UTM_CONTENT?  : string;
-}
 
-export interface ContactOptions {
-    iddatabase                        : number;
-    sendemailonactions                : string;
-    sendemail                         : boolean;
-    usenewsletterastemplate           : boolean;
-    idnewsletter                      : number;
-    denyupdatecontact                 : boolean;
-    forceallowrestorecontactonupdate  : boolean;
-    denysubscribeunsubscribedcontact  : boolean;
-}
-
-export interface Contact {
-    values : ContactValues,
-    options : ContactOptions
-}
-
-export interface ContactSubscription {
-  email_address: string;
-  status:  'pending' | 'subscribed' | 'unsubscribed' | 'transactional' | 'cleaned';
-  timestamp_opt?: string
-}
 
 export const actionToContactRecord = (action : ActionMessageV2, doubleOptIn : boolean, optOutAsTransactional : boolean) => {
+
+  const audience = 'ecipel'
 
   const cv : ContactValues = {
     EMAIL         : action.contact.email,
     NAME          : action.contact.firstName,
     SURNAME       : action.contact.lastName,
-    CELL          : "",
-    WBST_AUDIENCE : "ecipel",
-    NOME_UTENTE   : action.contact.email + "_ecipel",
-    UTM_SOURCE    : "",
-    UTM_MEDIUM    : "",
-    UTM_CAMPAIGN  : "",
-    UTM_CONTENT   : ""
+    CELL          : action.contact.phone,
+    WBST_AUDIENCE : audience,
+    NOME_UTENTE   : action.contact.email + "_" + audience,
+    UTM_SOURCE    : action.tracking.source,
+    UTM_MEDIUM    : action.tracking.medium,
+    UTM_CAMPAIGN  : action.tracking.campaign,
+    UTM_CONTENT   : action.tracking.content 
   }
 
   const co : ContactOptions = {
     iddatabase                        : 6,
-    sendemailonactions                : "insert,restore",
-    sendemail                         : true,
+    sendemailonactions                : "insert,restore,update",
+    sendemail                         : false,
     usenewsletterastemplate           : true,
     idnewsletter                      : 1811,
-    denyupdatecontact                 : true,
+    denyupdatecontact                 : false,
     forceallowrestorecontactonupdate  : true,
     denysubscribeunsubscribedcontact  : false
   }
