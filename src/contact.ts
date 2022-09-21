@@ -12,7 +12,9 @@ export const listName = (action : ActionMessageV2, listPerLang : boolean) => {
   }
 }
 
-
+export const isActionSyncable = (action : ActionMessageV2, onlyOptIn : boolean) => {
+  return (action.privacy.withConsent) && (action.privacy.optIn || !onlyOptIn)
+}
 
 export const actionToContactRecord = (action : ActionMessageV2, doubleOptIn : boolean, optOutAsTransactional : boolean) => {
 

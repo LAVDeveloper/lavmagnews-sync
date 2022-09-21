@@ -8,6 +8,7 @@ import {
 } from './client'
 
 import {
+  isActionSyncable,
   actionToContactRecord
 } from './contact'
 
@@ -32,6 +33,11 @@ export const cli = async (argv : string[]) => {
         if (action.campaign.name in skipCampaigns) {
           console.info(`Not syncing action because ${action.campaign.name} is skipped`)
           return false;
+        }
+
+        if (!isActionSyncable(action, opt.o)) {
+          console.info(`Not syncing action id ${action.actionId} (no consent/opt in)`)
+          return false
         }
 
         const member = actionToContactRecord(action, Boolean(opt.D), Boolean(opt.O))
