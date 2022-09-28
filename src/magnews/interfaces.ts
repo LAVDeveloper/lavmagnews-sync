@@ -1,7 +1,5 @@
 export interface Config {
-    apiKey?: string | undefined;
-    accessToken?: string | undefined;
-    server?: string | undefined;
+    accessToken: string;
 }
 
 export interface AddMemberResponse {
