@@ -3,7 +3,6 @@ import {syncQueue, ActionMessageV2, EventMessageV2} from '@proca/queue'
 import {KeyStore, loadKeyStoreFromFile} from '@proca/crypto'
 
 import {
-  makeClient,
   addContact
 } from './client'
 
@@ -15,7 +14,6 @@ import {
 
 export const cli = async (argv : string[]) => {
   const opt = parseArg(argv)
-  const client = makeClient()
 
   let keyStore : KeyStore | undefined;
 
@@ -41,10 +39,9 @@ export const cli = async (argv : string[]) => {
         }
 
         const member = actionToContactRecord(action, Boolean(opt.D), Boolean(opt.O))
-        const r = await addContact(client, member)
-        console.log(`added ${member.values.EMAIL} to MagNews list (id ${r.idcontact})`)
-        // console.log(r)
-        return r
+        const r = await addContact(member)
+          console.log(`added ${member.values.EMAIL} to MagNews list`)
+          return r
       }
 
     }, {keyStore, prefetch: opt.P || 10}).catch(e => console.error(e))

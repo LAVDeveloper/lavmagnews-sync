@@ -1,5 +1,5 @@
 import type {ActionMessageV2, EventMessageV2} from '@proca/queue'
-import {Contact, ContactValues, ContactOptions} from './magnews'
+import {Contact, ContactValues, ContactOptions} from './magnews/interfaces'
 
 export const listName = (action : ActionMessageV2, listPerLang : boolean) => {
   let c = action.campaign.name

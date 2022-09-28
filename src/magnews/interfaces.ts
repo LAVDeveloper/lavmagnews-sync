@@ -1,14 +1,8 @@
-export function setConfig(config: Config): void;
-
 export interface Config {
     apiKey?: string | undefined;
     accessToken?: string | undefined;
     server?: string | undefined;
 }
-
-function addListMember(
-    body: Contact
-): Promise<AddMemberResponse>;
 
 export interface AddMemberResponse {
     ok: boolean,
